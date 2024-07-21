@@ -1,0 +1,31 @@
+# Editor and IDE files
+.idea/
+*.swp
+*.swo
+*.pyc
+__pycache__/
+.DS_Store
+.vscode/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+.env
+
+# Database files (SQLite, etc.)
+db.sqlite3
+
+# Project specific logs and media files
+logs/
+media/
+
+# Python environment files
+*.egg-info/
+.Python
+pip-log.txt
+
+# Docker specific files
+Dockerfile*
+docker-compose*
+.dockerignore
