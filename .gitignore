@@ -26,6 +26,6 @@ media/
 pip-log.txt
 
 # Docker specific files
-Dockerfile*
-docker-compose*
+#Dockerfile*
+#docker-compose*
 .dockerignore
