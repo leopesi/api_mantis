@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build:
-      context: .  # Use um ponto para indicar o diretório atual
+      context: .  # Diretório atual
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -14,7 +14,7 @@ services:
       - ./.env
     depends_on:
       - db
-      
+
   db:
     image: postgres:15
     volumes:

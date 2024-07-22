@@ -17,10 +17,10 @@ RUN pip install -r requirements.txt
 RUN apt-get update && apt-get install -y netcat
 COPY ./entrypoint.sh .
 RUN sed -i 's/\r$//g' /app/entrypoint.sh  # Corrigido o caminho para /app
-RUN chmod +x /app/entrypoint.sh          # Corrigido o caminho para /app
+RUN chmod +x /app/entrypoint.sh          # Corrigido 
 
 # copy project
 COPY . .
 
 # run entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]         # Corrigido o caminho para /app
+ENTRYPOINT ["/app/entrypoint.sh"]         # Corrigido
