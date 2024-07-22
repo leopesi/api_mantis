@@ -54,14 +54,15 @@ WSGI_APPLICATION = 'hello_django.wsgi.application'
 # Database
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "ENGINE": "django.db.backends.postgresql",  # Defina o engine como PostgreSQL
+        "NAME": os.environ.get("POSTGRES_DB"),      # Use as variáveis do .env.prod.db
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("SQL_HOST", "db"),    # O hostname padrão é 'db' no Docker Compose
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

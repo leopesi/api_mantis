@@ -12,6 +12,8 @@ __pycache__/
 venv/
 ENV/
 .env
+.env.prod
+.env.prod.db
 
 # Database files (SQLite, etc.)
 db.sqlite3
