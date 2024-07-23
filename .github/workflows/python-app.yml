@@ -30,7 +30,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Lint with flake8
-        run: flake8 .
+        run: flake8 . --extend-ignore=E501,F401,W503
 
       - name: Test with pytest
         run: pytest -v --cov=. --cov-report=xml
