@@ -60,7 +60,7 @@ DATABASES = {
         "HOST": os.environ.get(
             "SQL_HOST", "db"
         ),  # O hostname padrão é 'db' no Docker Compose
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 
