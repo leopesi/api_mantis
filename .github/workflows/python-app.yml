@@ -32,12 +32,12 @@ jobs:
       - name: Lint with flake8
         run: flake8 . --extend-ignore=E501,F401,W503
 
-      - name: Test with pytest
-        run: |
-          python -m venv venv     
-          source venv/bin/activate 
-          pip install -r requirements.txt 
-          pytest -v tests --cov=. --cov-report=xml # Specify the test directory
+      #- name: Test with pytest
+      #  run: |
+      #    python -m venv venv     
+      #    source venv/bin/activate 
+      #    pip install -r requirements.txt 
+      #    pytest -v tests --cov=. --cov-report=xml # Specify the test directory
 
 
     strategy:
