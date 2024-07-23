@@ -34,8 +34,10 @@ jobs:
 
       - name: Test with pytest
         run: |
-           source venv/bin/activate   # Replace venv with your virtual environment name
-           pytest -v --cov=. --cov-report=xml
+          python -m venv venv     # Create the virtual environment
+          source venv/bin/activate  # Activate the virtual environment
+          pip install -r requirements.txt # Install requirements
+          pytest -v --cov=. --cov-report=xml
 
     strategy:
       matrix:
