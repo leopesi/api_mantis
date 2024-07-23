@@ -1,72 +1,52 @@
-###########
-# BUILDER #
-###########
+# Stage 1: Builder
+FROM python:3.11.4-slim-buster AS builder
 
-# pull official base image
-FROM python:3.11.4-slim-buster as builder
+# Diretório de trabalho
+WORKDIR /app
 
-# set work directory
-WORKDIR /usr/src/app
-
-# set environment variables
+# Variáveis de ambiente
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
+# Instalar dependências do sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    gettext  # Para internacionalização
 
-# lint
+# Instalar dependências Python no builder
+COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install flake8==6.0.0
-COPY . /usr/src/app/
-#RUN flake8 --ignore=E501,F401 .
+RUN pip wheel --wheel-dir /wheels -r requirements.txt
 
-# install python dependencies
-COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
-
-
-#########
-# FINAL #
-#########
-
-# pull official base image
+# Stage 2: Final
 FROM python:3.11.4-slim-buster
 
-# create directory for the app user
-RUN mkdir -p /home/app
+# Criar usuário e grupo para a aplicação
+RUN groupadd -r app && useradd -m -s /bin/bash -g app app
 
-# create the app user
-RUN addgroup --system app && adduser --system --group app
-
-# create the appropriate directories
-ENV HOME=/home/app
+# Diretórios da aplicação
 ENV APP_HOME=/home/app/web
-RUN mkdir $APP_HOME
-RUN mkdir $APP_HOME/staticfiles
+RUN mkdir -p $APP_HOME/staticfiles
 WORKDIR $APP_HOME
 
-# install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache /wheels/*
+# Instalar dependências Python
+COPY --from=builder /wheels /wheels
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# copy entrypoint.prod.sh
-COPY ./entrypoint.prod.sh .
-RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
-RUN chmod +x  $APP_HOME/entrypoint.prod.sh
+# Copiar o projeto e o entrypoint
+COPY --chown=app:app . .
+COPY entrypoint.prod.sh .
+RUN chmod +x entrypoint.prod.sh
 
-# copy project
-COPY . $APP_HOME
+# Coletar arquivos estáticos
+RUN python manage.py collectstatic --noinput
 
-# chown all the files to the app user
+# Configurar permissões (opcional, se você tiver problemas com o Nginx)
 RUN chown -R app:app $APP_HOME
 
-# change to the app user
+# Executar como usuário não-root
 USER app
 
-# run entrypoint.prod.sh
-ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+# Iniciar o Gunicorn
+CMD ["gunicorn", "hello_django.wsgi:application", "--bind", "0.0.0.0:8000"]

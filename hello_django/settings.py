@@ -64,6 +64,8 @@ DATABASES = {
     }
 }
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
