@@ -1,4 +1,4 @@
-name: Python Application CI/CD
+name: Python Application CI
 
 on:
   push:
@@ -15,11 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4  # Update to v4 for more flexibility
         with:
           python-version: ${{ matrix.python-version }}
+          cache: 'pip'                 # Enable pip caching
+          cache-dependency-path: '**/requirements.txt' # Cache based on requirements.txt
 
       - name: Install dependencies
         run: |
@@ -28,21 +30,28 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Lint with flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        run: flake8 .
 
       - name: Test with pytest
-        run: |
-          pytest -v  # Verbose output for better debugging
+        run: pytest -v --cov=. --cov-report=xml
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]  # Test multiple Python versions
+        python-version: ["3.8", "3.9", "3.10", "3.11.4"]  # Test multiple Python versions
 
-  deploy:
-    name: Deploy to Production
-    runs-on: ubuntu-latest
+  upload-coverage:
+    name: Upload Coverage Report
     needs: build-and-test
-    if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/prod'
     steps:
-      # ... (Your deployment steps here)
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage-report
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage-report/coverage.xml
