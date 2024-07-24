@@ -4,29 +4,41 @@ import requests # type: ignore
 from django.template import loader
 import os
 import json
-
+from django.conf import settings
+from requests.exceptions import HTTPError, RequestException
 # ... your other views ...pip
 
 def mantis_issue_view(request, issue_id):
     """Fetches Mantis issue data, dynamically renders an HTML table."""
-    print(os.environ.get('API_HEADERS'))
-    api_url = "https://mantis.xcelis.com.br/mantis/api/rest/issues/{}"
-    api_headers_str = os.environ.get("API_HEADERS")
-    api_headers = json.loads(api_headers_str)  # Convert JSON string to dictionary
+    try:
+        # Fetch API headers from environment
+        api_headers_str = os.environ.get("API_HEADERS")
+        if not api_headers_str:
+            raise ValueError("API_HEADERS environment variable not found")
 
-    url = api_url.format(issue_id)
+        api_headers = json.loads(api_headers_str)
+    except (json.JSONDecodeError, ValueError) as e:
+        if settings.DEBUG:
+            error_detail = str(e)  # Include detailed error in debug mode
+        else:
+            error_detail = "Error parsing or retrieving API headers"
+        return JsonResponse({"error": error_detail}, status=500)
+
+    api_url = f"https://mantis.xcelis.com.br/mantis/api/rest/issues/{issue_id}"
 
     try:
-        response = requests.get(url, headers=api_headers)
-        response.raise_for_status()
+        response = requests.get(api_url, headers=api_headers)
+        response.raise_for_status()  # Raise exception for bad HTTP status codes
 
-        data = response.json()
-        issue = data["issues"][0]  
+        issue_data = response.json()["issues"][0]
 
         template = loader.get_template("mantis_issue_table.html")
-        context = {"issue": issue}  # Pass the entire issue dictionary to the template
+        context = {"issue": issue_data}
         return HttpResponse(template.render(context, request))
 
-    except requests.exceptions.RequestException as e:
-        error_message = {"error": "Failed to fetch Mantis issue data.", "details": str(e)}
-        return JsonResponse(error_message, status=500)
+    except (HTTPError, RequestException) as e:
+        if settings.DEBUG:
+            error_detail = str(e)
+        else:
+            error_detail = "Error fetching Mantis issue data"
+        return JsonResponse({"error": error_detail}, status=500)

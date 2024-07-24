@@ -1,47 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mantis Issue Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MantisBT Issue Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <style>
-        /* Enhanced table styles for better readability */
-        body { font-family: sans-serif; }
-        h2, h3 { color: #333; margin-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f2f2f2; }
-        ul { list-style: none; padding: 0; }
-        li { margin-bottom: 5px; } 
+        .card { box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1); }
+        .card-header-title { font-weight: 600; }
+        .table td, .table th { vertical-align: top; }
+        .taglist { list-style: none; margin: 0; padding: 0; }
+        .tag {
+            background-color: #e0f2f1;
+            color: #006064;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 3px;
+        }
+        .table-container { overflow-x: auto; }
+        .history-entry { margin-bottom: 1rem; padding: 1rem; border-left: 4px solid #e0e0e0; }
+        .history-entry p { margin-bottom: 0.5rem; }
+        .history-entry .timestamp { color: #757575; font-size: 0.9em; }
+        .history-entry .field-change { font-style: italic; }
+        .field-label { font-weight: bold; }
+        .field-value { margin-left: 0.5rem; }
+        .issue-description { white-space: pre-line; } /* Preserve line breaks in the description */
     </style>
 </head>
 <body>
-    <h2>Mantis Issue #{{ issue.id }}: {{ issue.summary }}</h2>
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-2 has-text-centered">MantisBT Issue Details</h1>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        # Chamado {{ issue.id }} - {{ issue.summary }}
+                    </p>
+                </header>
 
-    <table>
-        {% for key, value in issue.items %}
-        <tr>
-            <th>{{ key|title }}</th> <td>
-                {% if value is mapping %}
-                    <ul>
-                        {% for sub_key, sub_value in value.items %}
-                            <li>{{ sub_key|title }}: 
-                                {% include "nested_data_template.html" with data=sub_value %}
-                            </li>
+                <div class="card-content">
+                    <div class="content issue-description">
+                        <p><strong>Description:</strong></p>
+                        <p>{{ issue.description }}</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                            <tbody>
+                                <tr>
+                                    <td><span class="field-label">Project:</span></td>
+                                    <td><span class="field-value">{{ issue.project.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="field-label">Category:</span></td>
+                                    <td><span class="field-value">{{ issue.category.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="field-label">Reporter:</span></td>
+                                    <td><span class="field-value">{{ issue.reporter.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="field-label">Handler:</span></td>
+                                    <td><span class="field-value">{{ issue.handler.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="field-label">Status:</span></td>
+                                    <td><span class="field-value">{{ issue.status.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="field-label">Priority:</span></td>
+                                    <td><span class="field-value">{{ issue.priority.name }}</span></td>
+                                </tr>
+
+                                {% if issue.tags %}
+                                    <tr>
+                                        <td><span class="field-label">Tags:</span></td>
+                                        <td>
+                                            <ul class="taglist">
+                                                {% for tag in issue.tags %}
+                                                    <li class="tag">{{ tag.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div> 
+
+                    {% if issue.notes %}
+                        <h3 class="subtitle is-4">Notes</h3>
+                        {% for note in issue.notes %}
+                            <div class="history-entry">
+                                <p class="timestamp">{{ note.created_at }} - {{ note.reporter.name }}</p>
+                                <p>{{ note.text }}</p>
+                                {% if note.attachments %}
+                                    <ul class="nested-list">
+                                        {% for attachment in note.attachments %}
+                                            <li>Anexo: {{ attachment.filename }} ({{ attachment.size }} bytes)</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
                         {% endfor %}
-                    </ul>
-                {% elif value is sequence %}
-                    <ul>
-                        {% for item in value %}
-                            <li>
-                                {% include "nested_data_template.html" with data=item %}
-                            </li>
+                    {% endif %}
+
+
+                    {% if issue.custom_fields %}
+                        <h3 class="subtitle is-4">Custom Fields</h3>
+                        <div class="table-container">
+                            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                <tbody>
+                                    {% for field in issue.custom_fields %}
+                                        <tr>
+                                            <td><span class="field-label">{{ field.field.name }}:</span></td>
+                                            <td><span class="field-value">{{ field.value }}</span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    {% if issue.history %}
+                        <h3 class="subtitle is-4">History</h3>
+                        {% for event in issue.history %}
+                            <div class="history-entry">
+                                <p class="timestamp">{{ event.created_at }} - {{ event.user.name }}</p>
+                                {% if event.message %}
+                                    <p>{{ event.message }}</p>
+                                {% endif %}
+                                {% if event.field %}
+                                    <p><span class="field-label">{{ event.field.label }}:</span> <span class="field-value">{{ event.old_value }} -> {{ event.new_value }}</span></p>
+                                {% endif %}
+                            </div>
                         {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ value }}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
