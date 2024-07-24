@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   web:
+    container_name: api_mantis_web
+    image: api_mantis_web:1.1
     build:
       context: ./
       dockerfile: Dockerfile.prod
@@ -16,6 +18,7 @@ services:
       - db
 
   db:
+    container_name: api_mantis_db
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -23,7 +26,9 @@ services:
       - ./.env.prod.db
 
   nginx:
+    container_name: api_mantis_nginx
     build: ./nginx
+    image: api_mantis_nginx:1.1
     volumes:
       - static_volume:/home/app/web/staticfiles
     ports:
