@@ -13,16 +13,14 @@ from requests.exceptions import HTTPError, RequestException
 def mantis_issue_view(request, issue_id):
     """Fetches Mantis issue data by ID and renders it as an HTML table.
 
-    Retrieves API headers from environment variables, makes a request to the Mantis API, 
-    and uses a template to render the issue details in a structured table format.
+    Retrieves API headers from environment variables, makes a request to the Mantis API, and uses a template to render the issue details in a structured table format.
 
     Args:
         request: The Django request object.
         issue_id: The ID of the Mantis issue to fetch.
 
     Returns:
-        HttpResponse: An HTTP response containing the rendered HTML table if successful, 
-                      or a JSON error response if an error occurs.
+        HttpResponse: An HTTP response containing the rendered HTML table if successful, or a JSON error response if an error occurs.
     """
 
     try:
