@@ -2,14 +2,17 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import requests # type: ignore
 from django.template import loader
+import os
+import json
 
-# ... your other views ...
+# ... your other views ...pip
 
 def mantis_issue_view(request, issue_id):
     """Fetches Mantis issue data, dynamically renders an HTML table."""
-
+    print(os.environ.get('API_HEADERS'))
     api_url = "https://mantis.xcelis.com.br/mantis/api/rest/issues/{}"
-    api_headers = {'Authorization': 'KEY'}
+    api_headers_str = os.environ.get("API_HEADERS")
+    api_headers = json.loads(api_headers_str)  # Convert JSON string to dictionary
 
     url = api_url.format(issue_id)
 
