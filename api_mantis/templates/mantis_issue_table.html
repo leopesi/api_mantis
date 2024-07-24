@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mantis Issue Details</title>
+    <style>
+        /* Enhanced table styles for better readability */
+        body { font-family: sans-serif; }
+        h2, h3 { color: #333; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 5px; } 
+    </style>
+</head>
+<body>
+    <h2>Mantis Issue #{{ issue.id }}: {{ issue.summary }}</h2>
+
+    <table>
+        {% for key, value in issue.items %}
+        <tr>
+            <th>{{ key|title }}</th> <td>
+                {% if value is mapping %}
+                    <ul>
+                        {% for sub_key, sub_value in value.items %}
+                            <li>{{ sub_key|title }}: 
+                                {% include "nested_data_template.html" with data=sub_value %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% elif value is sequence %}
+                    <ul>
+                        {% for item in value %}
+                            <li>
+                                {% include "nested_data_template.html" with data=item %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ value }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
