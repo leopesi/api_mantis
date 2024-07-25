@@ -1,0 +1,30 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Plan Terraform
+      run: terraform plan
+
+    - name: Apply Terraform
+      run: terraform apply -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ AKIAXZDMCYPXXHO4W4KN }}
+        AWS_SECRET_ACCESS_KEY: ${{ 9UmZ3RQq4y1CqTJMv2N5pUHIbOS7gjLl2wg1HC8V }}
+        AWS_DEFAULT_REGION: "your-aws-region"
