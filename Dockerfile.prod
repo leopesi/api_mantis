@@ -25,8 +25,11 @@ FROM python:3.11.4-slim-buster
 RUN groupadd -r app && useradd -m -s /bin/bash -g app app
 
 # Diretórios da aplicação
+ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
-RUN mkdir -p $APP_HOME/staticfiles
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
 
 # Instalar dependências Python
