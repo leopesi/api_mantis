@@ -7,7 +7,11 @@ from upload.views import image_upload
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+<<<<<<< HEAD
     path('ticket/', include('api_mantis.urls')),
+=======
+    path('/ticket', include('api_mantis.urls')),
+>>>>>>> e43e29a8aebb66ba0c8c2ffe0ad173e05f792db8
     path("", image_upload, name="upload")
 
 ]
