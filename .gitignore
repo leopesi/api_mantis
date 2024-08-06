@@ -1,0 +1,43 @@
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Bytecode and cache files
+*.pyc
+__pycache__/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Environment variables (these should NOT be versioned!)
+.env
+.env.prod
+.env.prod.db
+
+# Database files (SQLite, etc.)
+*.sqlite3
+
+# Project specific logs and media files
+logs/
+media/
+
+# Python environment files
+*.egg-info/
+.Python
+pip-log.txt
+
+# Terraform files (usually not needed in version control)
+.terraform/
+
+# Node.js modules (if you use frontend management with Node.js)
+node_modules/
+
+# Windows executables (this was already in your original .gitignore)
+.exe
+
+# Docker specific files
+.dockerignore
