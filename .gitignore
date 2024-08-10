@@ -41,3 +41,35 @@ node_modules/
 
 # Docker specific files
 .dockerignore
+
+
+
+
+
+# Diretórios gerados pelo Terraform
+.terraform/
+
+# Arquivos de estado do Terraform (sensíveis!)
+*.tfstate
+*.tfstate.*
+
+# Arquivos de backup do estado
+terraform.tfstate.backup
+
+# Logs e arquivos temporários
+crash.log
+crash.*.log
+
+# Arquivos de configuração específicos do ambiente (se aplicável)
+terraform.rc
+*.tfvars
+
+# Outros arquivos que podem conter dados sensíveis
+*.tfplan
+*.tfplan.json
+
+# Saídas do Terraform (geralmente não devem ser versionadas)
+*.tfoutput
+
+# Dependências baixadas (gerenciadas pelo Terraform)
+.terraform.lock.hcl
