@@ -1,8 +1,8 @@
 # Production VPC
 resource "aws_vpc" "production-vpc" {
   cidr_block           = "10.0.0.0/16"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  enable_dns_support   = true #Habilita o suporte a DNS.
+  enable_dns_hostnames = true #Permite que as instâncias na VPC tenham nomes de host baseados em DNS.
 }
 
 # Public subnets

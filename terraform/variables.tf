@@ -5,6 +5,10 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "profile" {
+  description = "THe AWS profile"
+  default = "leopesi"
+}
 # networking
 
 variable "public_subnet_1_cidr" {
@@ -36,11 +40,7 @@ variable "health_check_path" {
   default     = "/ping/"
 }
 
-# logs
 
-variable "log_retention_in_days" {
-  default = 30
-}
 
 # ecs
 
@@ -84,4 +84,10 @@ variable "autoscale_max" {
 variable "autoscale_desired" {
   description = "Desired number of tasks to run initially"
   default     = "4"
+}
+
+# logs
+
+variable "log_retention_in_days" {
+  default = 30
 }
