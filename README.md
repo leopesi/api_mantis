@@ -41,5 +41,7 @@ contruíndo...
 * [gunicorn==21.2.0](https://rometools.github.io/rome/) - Servidor WSGI Python.
 * [nginx:1.25](http://www.dropwizard.io/1.0.2/docs/) - Servidor web.
 * [Docker](https://maven.apache.org/) - Container.
-* [Docker Compose](https://rometools.github.io/rome/) Orquestração. 
+* [Docker Compose](https://rometools.github.io/rome/) Orquestração.
+* [Terraform v1.9.3]
+
 
