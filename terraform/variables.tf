@@ -7,7 +7,7 @@ variable "region" {
 
 variable "profile" {
   description = "THe AWS profile"
-  default = "leopesi"
+  default     = "leopesi"
 }
 # networking
 
@@ -90,4 +90,23 @@ variable "autoscale_desired" {
 
 variable "log_retention_in_days" {
   default = 30
+}
+
+
+# rds
+
+variable "rds_db_name" {
+  description = "RDS database name"
+  default     = "mydb"
+}
+variable "rds_username" {
+  description = "RDS database username"
+  default     = "foo"
+}
+variable "rds_password" {
+  description = "RDS database password"
+}
+variable "rds_instance_class" {
+  description = "RDS instance type"
+  default     = "db.t3.micro"
 }
