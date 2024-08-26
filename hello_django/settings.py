@@ -54,7 +54,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "hello_django.wsgi.application"
 
 # Database
-DATABASES = {
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+    
+'''DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",  # Defina o engine como PostgreSQL
         "NAME": os.environ.get("POSTGRES_DB"),  # Use as variáveis do .env.prod.db
@@ -65,7 +84,7 @@ DATABASES = {
         ),  # O hostname padrão é 'db' no Docker Compose
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
-}
+}'''
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
 
