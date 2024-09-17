@@ -3,8 +3,8 @@ output "alb_hostname" {
 }
 
 output "ecs_task_execution_role_arn" {
-  value       = aws_iam_role.ecs-task-execution-role.arn
-  description = "ARN for the ECS Task Execution Role"
+    value = aws_iam_role.ecs-task-execution-role.arn
+    description = "ARN for the ECS Task Execution Role"
 }
 
 output "subnets" {

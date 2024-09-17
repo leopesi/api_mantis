@@ -1,8 +1,8 @@
 # Production VPC
 resource "aws_vpc" "production-vpc" {
   cidr_block           = "10.0.0.0/16"
-  enable_dns_support   = true #Habilita o suporte a DNS.
-  enable_dns_hostnames = true #Permite que as instâncias na VPC tenham nomes de host baseados em DNS.
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
 # Public subnets
@@ -57,7 +57,7 @@ resource "aws_route_table_association" "private-route-2-association" {
 
 # Elastic IP
 resource "aws_eip" "elastic-ip-for-nat-gw" {
-  domain                    = "vpc"
+  domain                       = "vpc"
   associate_with_private_ip = "10.0.0.5"
   depends_on                = [aws_internet_gateway.production-igw]
 }
@@ -85,4 +85,3 @@ resource "aws_route" "public-internet-igw-route" {
   gateway_id             = aws_internet_gateway.production-igw.id
   destination_cidr_block = "0.0.0.0/0"
 }
-

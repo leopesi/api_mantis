@@ -2,13 +2,10 @@
 
 variable "region" {
   description = "The AWS region to create resources in."
-  default     = "us-east-1"
+  default     = "us-west-1"
 }
 
-variable "profile" {
-  description = "THe AWS profile"
-  default     = "leopesi"
-}
+
 # networking
 
 variable "public_subnet_1_cidr" {
@@ -30,8 +27,9 @@ variable "private_subnet_2_cidr" {
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)
-  default     = ["us-east-1b", "us-east-1c"]
+  default     = ["us-west-1b", "us-west-1c"]
 }
+
 
 # load balancer
 
@@ -39,7 +37,6 @@ variable "health_check_path" {
   description = "Health check path for the default target group"
   default     = "/ping/"
 }
-
 
 
 # ecs
@@ -51,7 +48,7 @@ variable "ecs_cluster_name" {
 
 variable "docker_image_url_django" {
   description = "Docker image to run in the ECS cluster"
-  default     = "5349-5010-1999.dkr.ecr.us-east-1.amazonaws.com/django-app:web"
+  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest"
 }
 
 variable "app_count" {
@@ -69,6 +66,19 @@ variable "fargate_memory" {
   default     = "512"
 }
 
+variable "allowed_hosts" {
+  description = "Domain name for allowed hosts"
+  default     = "YOUR DOMAIN NAME"
+}
+
+
+# logs
+
+variable "log_retention_in_days" {
+  default = 30
+}
+
+
 # ECS service auto scaling
 
 variable "autoscale_min" {
@@ -84,12 +94,6 @@ variable "autoscale_max" {
 variable "autoscale_desired" {
   description = "Desired number of tasks to run initially"
   default     = "4"
-}
-
-# logs
-
-variable "log_retention_in_days" {
-  default = 30
 }
 
 
@@ -109,4 +113,20 @@ variable "rds_password" {
 variable "rds_instance_class" {
   description = "RDS instance type"
   default     = "db.t3.micro"
+}
+
+
+# domain
+
+variable "certificate_arn" {
+  description = "AWS Certificate Manager ARN for validated domain"
+  default     = "YOUR ARN"
+}
+
+
+# nginx
+
+variable "docker_image_url_nginx" {
+  description = "Docker image to run in the ECS cluster"
+  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest"
 }

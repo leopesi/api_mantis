@@ -1,47 +1,89 @@
-# API Mantis
+# Deploying Django to AWS ECS with Terraform
 
-Projeto de uma aplicação web de consulta de tickets abertos na plataforma MantisBT.
+Sets up the following AWS infrastructure:
 
-Teremos uma aplicação construída em python django com uma tela de formulário que consulta a API do MantiBT e retorna informações atualizadas do ticket pesquisado.
-A aplicação terá o ambiente de desenvolvimento (local) e o de produção hospedado na AWS.
+- Networking:
+    - VPC
+    - Public and private subnets
+    - Routing tables
+    - Internet Gateway
+    - Key Pairs
+- Security Groups
+- Load Balancers, Listeners, and Target Groups
+- IAM Roles and Policies
+- ECS:
+    - Task Definition (with multiple containers)
+    - Cluster
+    - Service
+- Auto scaling config
+- RDS
+- Health Checks and Logs
 
-## 🚀 Começando
+## Want to learn how to build this?
 
-Essas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento.
+Check out the [tutorial](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/).
 
+## Want to use this project?
 
-### 📋 Pré-requisitos
+1. Install Terraform
 
-contruíndo...
+1. Sign up for an AWS account
 
-### 🔧 Instalação
+1. Create two ECR repositories, `django-app` and `nginx`.
 
-contruíndo...
+1. Fork/Clone
 
-## ⚙️ Executando os testes
+1. Build the Django and Nginx Docker images and push them up to ECR:
 
-contruíndo...
+    ```sh
+    $ cd app
+    $ docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest .
+    $ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest
+    $ cd ..
 
-### 🔩 Analise os testes de ponta a ponta
+    $ cd nginx
+    $ docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest .
+    $ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest
+    $ cd ..
+    ```
 
-contruíndo...
+1. Update the variables in *terraform/variables.tf*.
 
-### ⌨️ E testes de estilo de codificação
+1. Set the following environment variables, init Terraform, create the infrastructure:
 
-contruíndo...
+    ```sh
+    $ cd terraform
+    $ export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
+    $ export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
 
-## 📦 Implantação
+    $ terraform init
+    $ terraform apply
+    $ cd ..
+    ```
 
-contruíndo...
+1. Terraform will output an ALB domain. Create a CNAME record for this domain
+   for the value in the `allowed_hosts` variable.
 
-## 🛠️ Construído com
+1. To apply the migrations, run the following command, making sure to replace `YOUR_SUBNET_1`, `YOUR_SUBNET_2`, and `YOUR_SECURITY_GROUP` with the values that were outputted to your terminal from the `terraform apply` command:
 
-* [Django==4.2.3](http://www.dropwizard.io/1.0.2/docs/) - Framework.
-* [Postgres](https://maven.apache.org/) - DB.
-* [gunicorn==21.2.0](https://rometools.github.io/rome/) - Servidor WSGI Python.
-* [nginx:1.25](http://www.dropwizard.io/1.0.2/docs/) - Servidor web.
-* [Docker](https://maven.apache.org/) - Container.
-* [Docker Compose](https://rometools.github.io/rome/) Orquestração.
-* [Terraform v1.9.3]
+    ```sh
+    $ aws ecs run-task \
+        --cluster production-cluster \
+        --task-definition django-migration-task \
+        --launch-type FARGATE \
+        --network-configuration "awsvpcConfiguration={subnets=[YOUR_SUBNET_1, YOUR_SUBNET_2],securityGroups=[YOUR_SECURITY_GROUP],assignPublicIp=ENABLED}"
+    ```
 
+1. Now you can open `https://your.domain.com/admin`. Note that `http://` won't work.
 
+1. To collect the static files, navigate to the "deploy" folder, create and activate a Python virtual environment, install the requirements, and then run the following command, making sure to replace `<AWS_ACCOUNT_ID>` with your AWS account ID:
+
+    ```sh
+    (env)$ python update-ecs.py \
+            --cluster=production-cluster \
+            --service=production-service \
+            --image="<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest" \
+            --container-name django-app
+    ```
+
+    You can use the same command to bump the Task Definition and update the Service.

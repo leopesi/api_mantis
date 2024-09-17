@@ -1,75 +1,9 @@
-# Editor and IDE files
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Bytecode and cache files
-*.pyc
-__pycache__/
-
-# Virtual environments
-.venv/
-venv/
-ENV/
-
-# Environment variables (these should NOT be versioned!)
-.env
-.env.prod
-.env.prod.db
-
-# Database files (SQLite, etc.)
+__pycache__
+.DS_Store
 *.sqlite3
+env
 
-# Project specific logs and media files
-logs/
-media/
-
-# Python environment files
-*.egg-info/
-.Python
-pip-log.txt
-
-# Terraform files (usually not needed in version control)
-.terraform/
-
-# Node.js modules (if you use frontend management with Node.js)
-node_modules/
-
-# Windows executables (this was already in your original .gitignore)
-.exe
-
-# Docker specific files
-.dockerignore
-
-
-
-
-
-# Diretórios gerados pelo Terraform
-.terraform/
-
-# Arquivos de estado do Terraform (sensíveis!)
-*.tfstate
-*.tfstate.*
-
-# Arquivos de backup do estado
-terraform.tfstate.backup
-
-# Logs e arquivos temporários
-crash.log
-crash.*.log
-
-# Arquivos de configuração específicos do ambiente (se aplicável)
-terraform.rc
-*.tfvars
-
-# Outros arquivos que podem conter dados sensíveis
-*.tfplan
-*.tfplan.json
-
-# Saídas do Terraform (geralmente não devem ser versionadas)
-*.tfoutput
-
-# Dependências baixadas (gerenciadas pelo Terraform)
-.terraform.lock.hcl
+terraform/.terraform.lock.hcl
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
