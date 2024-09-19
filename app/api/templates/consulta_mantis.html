@@ -1,0 +1,6 @@
+<form method="POST" action="{% url 'consulta_mantis' %}">
+    {% csrf_token %}
+    <label for="issue_id">Consultar Mantis:</label>
+    <input type="text" id="issue_id" name="issue_id" required>
+    <button type="submit">Consultar</button>
+</form>

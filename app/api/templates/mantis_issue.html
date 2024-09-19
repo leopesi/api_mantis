@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantis Issue Details</title>
+    <style>
+        /* Definição de variáveis CSS para facilitar manutenção */
+        :root {
+            --primary-color: #4CAF50;
+            --primary-color-hover: #45a049;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --table-header-bg: #f2f2f2;
+            --gemini-bg: #e0f7fa;
+            --gemini-border: #00acc1;
+            --font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        /* Melhorando responsividade para tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+        }
+
+        /* Tornar a tabela responsiva para telas menores */
+        @media (max-width: 768px) {
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+
+            th {
+                background-color: var(--primary-color);
+                color: white;
+                text-align: center;
+            }
+
+            td {
+                text-align: center;
+            }
+        }
+
+        .gemini-analysis {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--gemini-bg);
+            border-left: 5px solid var(--gemini-border);
+            border-radius: 4px;
+        }
+
+        pre {
+            white-space: pre-wrap; /* Mantém a formatação mas permite quebra de linha em dispositivos menores */
+            word-wrap: break-word; /* Quebra palavras longas em linhas menores */
+        }
+
+        /* Estilizando o botão para tornar mais moderno */
+        .back-button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-color-hover);
+        }
+
+        /* Centralizando o botão e as seções em dispositivos menores */
+        form, .gemini-analysis {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Ajustando tamanhos de fontes e margens em telas pequenas */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .back-button {
+                width: 100%;
+                padding: 15px;
+                font-size: 1.2rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Mantis</h1>
+        <h2>Análise da Gemini</h2>
+
+        <div class="conteudo">
+            <div class="gemini-analysis">
+                <pre>{{ gemini_analysis }}</pre>
+            </div>
+        </div>
+        
+        <form action="{% url 'consulta_mantis' %}" method="get">
+            {% csrf_token %}
+            <button type="submit" class="back-button">Voltar à Consulta</button>
+        </form>
+    </div>
+</body>
+</html>
