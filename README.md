@@ -21,20 +21,38 @@ A estrutura do repositório está organizada da seguinte forma:
 ## AWS Infrastructure
 
 ### Networking
-* VPC
-* Public and private subnets
-* Routing tables
-* Internet Gateway
+- **VPC**: Virtual Private Cloud para isolar a infraestrutura da aplicação.
+- **Public and Private Subnets**: Sub-redes públicas e privadas para distribuir os recursos de forma segura e escalável.
+- **Routing Tables**: Tabelas de roteamento para gerenciar o tráfego de rede entre as sub-redes.
+- **Internet Gateway**: Permite a comunicação de saída para a internet a partir das sub-redes públicas.
+
 ### Security Groups
+- Grupos de segurança configurados para controlar o tráfego de entrada e saída para os recursos da AWS, como ECS e RDS.
+
 ### Load Balancers, Listeners, and Target Groups
+- **Load Balancer**: Distribuidor de tráfego para balancear a carga entre múltiplas instâncias de containers.
+- **Listeners**: Responsáveis por escutar as requisições no Load Balancer e direcioná-las para os Target Groups.
+- **Target Groups**: Conjunto de containers que receberão o tráfego balanceado.
+
 ### IAM Roles and Policies
+- **IAM Roles**: Perfis de permissões atribuídos aos recursos, permitindo que ECS e outros serviços da AWS interajam de forma segura.
+- **IAM Policies**: Políticas que definem permissões detalhadas para os serviços e recursos AWS.
+
 ### ECS
-* Task Definition (with multiple containers)
-* Cluster
-* Service
-### Auto scaling config
+- **Task Definition**: Definição de tarefa com múltiplos containers, incluindo a configuração de rede, recursos (CPU, memória), e volumes.
+- **Cluster**: Conjunto de instâncias do ECS onde as tarefas são executadas.
+- **Service**: Garante que a quantidade desejada de tarefas esteja sempre em execução no cluster.
+
+### Auto Scaling Config
+- Configuração de auto scaling para ajustar dinamicamente o número de containers com base na demanda de tráfego ou uso de recursos.
+
 ### RDS
-### Health Checks and Logs   
+- Banco de dados relacional configurado para persistência de dados, utilizando o serviço **Amazon RDS** com alta disponibilidade e backups automáticos.
+
+### Health Checks and Logs
+- **Health Checks**: Verificações automáticas de integridade para monitorar o estado dos containers e recursos.
+- **Logs**: Armazenamento de logs de aplicação e de sistema utilizando serviços como **CloudWatch** para monitoramento e análise.
+
 
 ## Tecnologias Utilizadas
 
