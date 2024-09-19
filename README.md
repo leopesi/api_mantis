@@ -9,12 +9,14 @@ Além disso, o projeto utiliza **Terraform** para provisionar a infraestrutura n
 ## Estrutura do Projeto
 
 A estrutura do repositório está organizada da seguinte forma:
+
+```bash
 .
 ├── app          # Código-fonte da aplicação Django
 ├── deploy       # Scripts e configuração para deploy da aplicação
 ├── nginx        # Configuração do servidor Nginx para balanceamento de carga
 └── terraform    # Definições de infraestrutura como código usando Terraform
-
+```
 
 
 ## Tecnologias Utilizadas
