@@ -17,7 +17,23 @@ A estrutura do repositório está organizada da seguinte forma:
 ├── nginx        # Configuração do servidor Nginx para balanceamento de carga
 └── terraform    # Definições de infraestrutura como código usando Terraform
 ```
+AWS infrastructure:
 
+- **Networking**:
+- ***VPC***
+- ***Public and private subnets***
+- ***Routing tables***
+- ***Internet Gateway***
+- **Security Groups**
+Load Balancers, Listeners, and Target Groups
+IAM Roles and Policies
+ECS:
+Task Definition (with multiple containers)
+Cluster
+Service
+Auto scaling config
+RDS
+Health Checks and Logs
 
 ## Tecnologias Utilizadas
 
