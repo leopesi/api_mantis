@@ -1,89 +1,77 @@
-# Deploying Django to AWS ECS with Terraform
+# MANTISBT AI Automation
 
-Sets up the following AWS infrastructure:
+## Descrição do Projeto
 
-- Networking:
-    - VPC
-    - Public and private subnets
-    - Routing tables
-    - Internet Gateway
-    - Key Pairs
-- Security Groups
-- Load Balancers, Listeners, and Target Groups
-- IAM Roles and Policies
-- ECS:
-    - Task Definition (with multiple containers)
-    - Cluster
-    - Service
-- Auto scaling config
-- RDS
-- Health Checks and Logs
+Este projeto consiste em uma aplicação que utiliza Inteligência Artificial (IA) para analisar, resumir e propor soluções automatizadas para chamados de TI capturados pela plataforma **MANTISBT**. A IA integra-se ao MANTISBT para fornecer insights automáticos, sugerindo soluções potenciais com base em análise de dados e aprendizado de máquina.
 
-## Want to learn how to build this?
+Além disso, o projeto utiliza **Terraform** para provisionar a infraestrutura na **AWS**, incluindo repositórios de imagens Docker no **ECR**, execução de containers no **ECS Fargate**, **RDS** para persistência de dados, e um balanceador de carga com suporte a HTTPS.
 
-Check out the [tutorial](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/).
+## Estrutura do Projeto
 
-## Want to use this project?
+A estrutura do repositório está organizada da seguinte forma:
 
-1. Install Terraform
+```bash
+.
+├── app          # Código-fonte da aplicação Django
+├── deploy       # Scripts e configuração para deploy da aplicação
+├── nginx        # Configuração do servidor Nginx para balanceamento de carga
+└── terraform    # Definições de infraestrutura como código usando Terraform
+```
 
-1. Sign up for an AWS account
+## AWS Infrastructure
 
-1. Create two ECR repositories, `django-app` and `nginx`.
+### Networking
+- **VPC**: Virtual Private Cloud para isolar a infraestrutura da aplicação.
+- **Public and Private Subnets**: Sub-redes públicas e privadas para distribuir os recursos de forma segura e escalável.
+- **Routing Tables**: Tabelas de roteamento para gerenciar o tráfego de rede entre as sub-redes.
+- **Internet Gateway**: Permite a comunicação de saída para a internet a partir das sub-redes públicas.
 
-1. Fork/Clone
+### Security Groups
+- Grupos de segurança configurados para controlar o tráfego de entrada e saída para os recursos da AWS, como ECS e RDS.
 
-1. Build the Django and Nginx Docker images and push them up to ECR:
+### Load Balancers, Listeners, and Target Groups
+- **Load Balancer**: Distribuidor de tráfego para balancear a carga entre múltiplas instâncias de containers.
+- **Listeners**: Responsáveis por escutar as requisições no Load Balancer e direcioná-las para os Target Groups.
+- **Target Groups**: Conjunto de containers que receberão o tráfego balanceado.
 
-    ```sh
-    $ cd app
-    $ docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest .
-    $ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest
-    $ cd ..
+### IAM Roles and Policies
+- **IAM Roles**: Perfis de permissões atribuídos aos recursos, permitindo que ECS e outros serviços da AWS interajam de forma segura.
+- **IAM Policies**: Políticas que definem permissões detalhadas para os serviços e recursos AWS.
 
-    $ cd nginx
-    $ docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest .
-    $ docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/nginx:latest
-    $ cd ..
-    ```
+### ECS
+- **Task Definition**: Definição de tarefa com múltiplos containers, incluindo a configuração de rede, recursos (CPU, memória), e volumes.
+- **Cluster**: Conjunto de instâncias do ECS onde as tarefas são executadas.
+- **Service**: Garante que a quantidade desejada de tarefas esteja sempre em execução no cluster.
 
-1. Update the variables in *terraform/variables.tf*.
+### Auto Scaling Config
+- Configuração de auto scaling para ajustar dinamicamente o número de containers com base na demanda de tráfego ou uso de recursos.
 
-1. Set the following environment variables, init Terraform, create the infrastructure:
+### RDS
+- Banco de dados relacional configurado para persistência de dados, utilizando o serviço **Amazon RDS** com alta disponibilidade e backups automáticos.
 
-    ```sh
-    $ cd terraform
-    $ export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
-    $ export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
+### Health Checks and Logs
+- **Health Checks**: Verificações automáticas de integridade para monitorar o estado dos containers e recursos.
+- **Logs**: Armazenamento de logs de aplicação e de sistema utilizando serviços como **CloudWatch** para monitoramento e análise.
 
-    $ terraform init
-    $ terraform apply
-    $ cd ..
-    ```
 
-1. Terraform will output an ALB domain. Create a CNAME record for this domain
-   for the value in the `allowed_hosts` variable.
+## Tecnologias Utilizadas
 
-1. To apply the migrations, run the following command, making sure to replace `YOUR_SUBNET_1`, `YOUR_SUBNET_2`, and `YOUR_SECURITY_GROUP` with the values that were outputted to your terminal from the `terraform apply` command:
+- **Python / Django**: Framework web utilizado para desenvolver a aplicação.
+- **Inteligência Artificial**: IA implementada para análise e sugestão de soluções para chamados de TI.
+- **MANTISBT**: Plataforma de gerenciamento de chamados integrada ao projeto.
+- **Docker**: Utilizado para containerizar a aplicação.
+- **Nginx**: Servidor web usado para servir a aplicação e gerenciar o balanceamento de carga.
+- **Terraform**: Ferramenta para provisionamento de infraestrutura.
+- **AWS ECS (Fargate)**: Serviço para orquestração de containers.
+- **AWS ECR**: Registro de imagens Docker.
+- **AWS RDS**: Banco de dados relacional.
+- **AWS Load Balancer**: Utilizado para gerenciar o tráfego com suporte a HTTPS.
+- **Boto3**: Biblioteca Python para interagir com serviços AWS.
 
-    ```sh
-    $ aws ecs run-task \
-        --cluster production-cluster \
-        --task-definition django-migration-task \
-        --launch-type FARGATE \
-        --network-configuration "awsvpcConfiguration={subnets=[YOUR_SUBNET_1, YOUR_SUBNET_2],securityGroups=[YOUR_SECURITY_GROUP],assignPublicIp=ENABLED}"
-    ```
+## Contribuição
 
-1. Now you can open `https://your.domain.com/admin`. Note that `http://` won't work.
+Sinta-se à vontade para abrir issues ou pull requests caso deseje contribuir com o projeto.
 
-1. To collect the static files, navigate to the "deploy" folder, create and activate a Python virtual environment, install the requirements, and then run the following command, making sure to replace `<AWS_ACCOUNT_ID>` with your AWS account ID:
+## Licença
 
-    ```sh
-    (env)$ python update-ecs.py \
-            --cluster=production-cluster \
-            --service=production-service \
-            --image="<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/django-app:latest" \
-            --container-name django-app
-    ```
-
-    You can use the same command to bump the Task Definition and update the Service.
+Este projeto é licenciado sob a licença MIT - veja o arquivo LICENSE para mais detalhes.
