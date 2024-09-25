@@ -1,0 +1,52 @@
+image:
+  name: docker:20.10.16-dind
+  
+services:
+  - name: docker:20.10.16-dind
+    alias: docker
+
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: "latest"
+  DJANGO_IMAGE: "$AWS_ECR_REGISTRY/django-app:$IMAGE_TAG"
+  NGINX_IMAGE: "$AWS_ECR_REGISTRY/nginx:$IMAGE_TAG"
+
+before_script:
+  - apk add --no-cache bash python3 py3-pip
+  - pip install awscli
+  - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_REGISTRY
+
+
+# Build Job
+build_django:
+  stage: build
+  script:
+    - docker build --cache-from $DJANGO_IMAGE ./app
+    - docker push $DJANGO_IMAGE
+
+build_nginx:
+  stage: build
+  script:
+    - docker build -t $NGINX_IMAGE ./nginx
+    - docker push $NGINX_IMAGE
+
+# Deploy Job
+deploy:
+  stage: deploy
+  script:
+    - apk add --no-cache openssh-client
+    - aws ecs run-task 
+        --region us-east-1
+        --cluster production-cluster
+        --task-definition django-migration-task
+        --launch-type FARGATE
+        --network-configuration "awsvpcConfiguration={subnets=[$AWS_SUBNET_1,$AWS_SUBNET_2],securityGroups=[$AWS_SECURITY_GROUP],assignPublicIp=ENABLED}"
+    - cd deploy
+    - pip install -r requirements.txt
+  only:
+  - terraform

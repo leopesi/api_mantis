@@ -1,9 +1,44 @@
-__pycache__
-.DS_Store
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
 *.sqlite3
-env
 
-terraform/.terraform.lock.hcl
+# MacOS
+.DS_Store
+
+# Django Environment
+.env
+# Para garantir que a pasta venv seja ignorada em qualquer nível
+/venv/
+__pycache__/
 terraform/.terraform/
+# Virtual Environment
+env/
+venv/
+
+# Django Static/Media Files (opcional, dependendo de como você está lidando com arquivos estáticos)
+staticfiles/
+mediafiles/
+
+# Log files
+*.log
+
+# Nginx (opcional, dependendo de como você gerencia o Nginx)
+nginx.conf
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
+
+# Terraform variables (opcional, se você não quer versionar variáveis sensíveis)
+terraform/variables.tf
+variables.tf
+
+# Migrations (somente arquivos temporários de migração, mantenha __init__.py)
+app/api/migrations/[!__init__].py
+migrations/[!__init__].py
