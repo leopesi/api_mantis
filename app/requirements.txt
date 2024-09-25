@@ -1,3 +1,14 @@
 Django==4.2.7
 gunicorn==21.2.0
 psycopg2-binary==2.9.9
+requests==2.32.3
+
+
+google-ai-generativelanguage==0.6.9
+google-api-core==2.19.2
+google-api-python-client==2.146.0
+google-auth==2.34.0
+google-auth-httplib2==0.2.0
+google-generativeai==0.8.1
+googleapis-common-protos==1.65.0
+python-dotenv==1.0.1
