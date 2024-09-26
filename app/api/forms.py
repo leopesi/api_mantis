@@ -1,4 +1,4 @@
-from django import forms
+"""from django import forms
 
 class MantisIssueForm(forms.Form):
     issue_id = forms.CharField(
@@ -11,3 +11,9 @@ class MantisIssueForm(forms.Form):
             'required': True
         })
     )
+"""
+
+from django import forms
+
+class MantisIssueForm(forms.Form):
+    issue_id = forms.CharField(label="ID da Issue", max_length=100, required=True)
