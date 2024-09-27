@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
 from django.conf import settings
-from django.urls import reverse_lazy
 from requests.exceptions import RequestException
 import google.generativeai as genai
 import os
@@ -51,9 +50,13 @@ class ConsultaMantisView(View):
                 return JsonResponse({"error": "Nenhum dado encontrado para a issue."}, status=404)
             issue_data = issue_data[0]
 
-            prompt = (f"Analisar o seguinte problema do Mantis e fornecer um resumo conciso e perspicaz, "
-                      f"incluindo um resumo inteligente das atividades: {issue_data}. No Final faça uma sugestão de solução baseado no problema e nas atividades. "
-                      f"Colocar negrito quando o texto estiver entre 2 asteriscos, ex.: **Atividades:**")
+            prompt = (f"Analisar o chamado {issue_data} e fornecer um resumo conciso e perspicaz"
+                      f"Destaque os campos ID, Solicitante, Date Submitted, Last Update, Assigned To, Summary"
+                      f"Reproduza o campo Description"
+                      f"Faça um resumo inteligente, para leigos em TI, das Activities: {issue_data} com as datas de cada atualização. Instruções: #INICIOATENDIMENTO indica o início do atendimento, #COMUNICACAO indica que o Solicitante foi comunicado, #SOLUCAO indica que o problema foi resolvido"
+                      f"Faça uma conclusão resumida das do campo Activities em ordem cronológica"
+                      f"Escreva tudo em português"
+                      )
 
             try:
                 model = genai.GenerativeModel('gemini-1.5-flash')

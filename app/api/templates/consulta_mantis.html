@@ -1,127 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta Mantis</title>
+    <!-- Incluindo o Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #f8f9fa;
-            color: #333;
+        }
+        .form-container {
+            max-width: 400px; /* Largura máxima do formulário */
+            margin: 50px auto; /* Centraliza verticalmente */
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        h1 {
-            text-align: center;
-            color: #1c2227;
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-
-        form {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            transition: transform 0.3s ease;
-        }
-
-        form:hover {
-            transform: scale(1.02);
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-            font-size: 1rem;
-            color: #495057;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 20px;
             border-radius: 8px;
-            border: 1px solid #ced4da;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-        }
-
-        .btn {
-            display: inline-block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #73767a;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #898d60;
-        }
-
-        .btn:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            form {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .btn {
-                padding: 12px;
-                font-size: 1rem;
-            }
+            background-color: white; /* Fundo branco para o formulário */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
         }
     </style>
 </head>
+
 <body>
-    <form method="POST" action="{% url 'consulta_mantis' %}">
-        <h1>Consultar Chamado</h1>
-        {% csrf_token %}
-        
-        {# Renderiza o campo de 'issue_id' do form #}
-        {{ form.as_p }}
-        
-        <button type="submit" class="btn">Consultar</button>
-    </form>
-    
+    <div class="form-container">
+
+        <form method="POST" action="{% url 'consulta_mantis' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                {{ form.issue_id }} <!-- Usando o widget com a classe já definida -->
+                {% if form.issue_id.errors %}
+                    <div class="text-danger">{{ form.issue_id.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn-dark btn-block">Consultar</button>
+        </form>
+    </div>
+
+    <!-- Incluindo o Bootstrap JS e dependências (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
