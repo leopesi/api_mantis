@@ -6,3 +6,4 @@ class HealthCheckMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.META['PATH_INFO'] == '/ping/':
             return HttpResponse('pong!')
+
