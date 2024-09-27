@@ -8,7 +8,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # Application definition
 
@@ -30,8 +30,15 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://leopesi.com.br',
+    'https://xcelisvalinhos.sharepoint.com',
+]
+CSRF_COOKIE_SAMESITE = 'None'  # Permitir que o cookie CSRF seja utilizado em cross-origin
+CSRF_COOKIE_SECURE = True      # Garantir que o CSRF cookie só é enviado via HTTPS
 
 ROOT_URLCONF = 'hello_django.urls'
 
