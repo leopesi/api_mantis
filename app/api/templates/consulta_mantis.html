@@ -116,8 +116,12 @@
     <form method="POST" action="{% url 'consulta_mantis' %}">
         <h1>Consultar Chamado</h1>
         {% csrf_token %}
-        <input type="text" id="issue_id" name="issue_id" class="form-control" placeholder="Ex. 23173" required aria-label="ID da Issue">
+        
+        {# Renderiza o campo de 'issue_id' do form #}
+        {{ form.as_p }}
+        
         <button type="submit" class="btn">Consultar</button>
     </form>
+    
 </body>
 </html>

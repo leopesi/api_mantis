@@ -1,19 +1,10 @@
-"""from django import forms
-
-class MantisIssueForm(forms.Form):
-    issue_id = forms.CharField(
-        label="ID da Issue",
-        max_length=100,
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',  # Adiciona classes de estilo
-            'placeholder': 'Digite o ID da Issue',
-            'required': True
-        })
-    )
-"""
-
 from django import forms
 
-class MantisIssueForm(forms.Form):
-    issue_id = forms.CharField(label="ID da Issue", max_length=100, required=True)
+class ConsultaMantisForm(forms.Form):
+    issue_id = forms.CharField(label='Issue ID', max_length=100, required=True)
+
+    def clean_issue_id(self):
+        issue_id = self.cleaned_data.get('issue_id')
+        if not issue_id.isdigit():
+            raise forms.ValidationError("O Issue ID deve ser numérico.")
+        return issue_id
