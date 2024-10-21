@@ -1,8 +1,26 @@
-# MantisBT AI Automation
+# Deploy app Django com Infra AWS: Docker, Terraform e GitLab: Do VPC ao Load Balancer.
 
 ## Descrição 
 
-Este projeto integra IA para analisar, resumir e propor soluções automatizadas para chamados de TI no MantisBT, utilizando GitLab CI para pipeline de build/deploy. A infraestrutura é provisionada com Terraform na AWS, com ECR, ECS Fargate, RDS e balanceamento de carga HTTPS.
+## Integração de Gestão de Incidentes e Automação de Infraestrutura
+Esta aplicação une dois mundos: gestão e análise de incidentes de TI com a automação da infraestrutura. De um lado, temos uma aplicação que integra SharePoint com MantisBT e a IA da Gemini, permitindo que os usuários acompanhem e analisem seus tickets de suporte com a IA fazendo uma análise do incidente de acordo com o perfil do usuário. Do outro, uma infraestrutura robusta e automaticamente provisionada na AWS com Terraform e GitLab. Juntas, essas soluções oferecem uma plataforma completa que otimiza tanto o gerenciamento de problemas quanto a entrega de recursos de TI.
+
+## Gestão de Incidentes com SharePoint via Microsoft Graph API e MantisBT
+Ferramenta de gestão de incidentes de suporte de TI com Python. Integrada à intranet (Sharepoint) via iframe, utiliza a Microsoft Graph API para captar a Microsoft account do usuário e faz uma requisição na API do MantisBT para captar os tickets associados ao usuário e retorna uma lista com o título e o número do ticket.
+
+O usuário pode pedir uma análise do ticket e então uma outra requisição é enviada para a Gemini API com um script e o json do ticket, que retorna uma análise e resume cada ação aplicada no caso (Se for Global Reader retorna um ambiente de suporte com análise e sugestões de solução do incidente com uma integracação com a IA da Gemini API).
+
+## Deploy Automatizado de Infraestrutura AWS com Terraform e GitLab: Do VPC ao Load Balancer
+Infraestrutura (IaC) escrita com Terraform, integrada com GitLab (build/deploy) e versionada com git. Cria uma VPC que define a rede onde os recursos serão implementados. Em seguida, são configuradas as sub-redes públicas e privadas, seguidas pelo grupo de sub-redes do banco de dados.
+
+Depois disso, são configurados os grupos de segurança para controlar o tráfego, incluindo o grupo de segurança do RDS, o do ECS e o do Load Balancer.
+
+Com a rede e a segurança preparadas, a instância do banco de dados RDS é criada, juntamente com o EFS e access point.
+
+Em seguida, a Role IAM necessário para a execução das tarefas ECS é configurado, seguido pela criação do cluster ECS e da Task Definition da aplicação. O Auto Scaling Target para o ECS é então configurado, permitindo a escalabilidade do ECS.
+
+Finalmente, o grupo de destino para o ALB é criado e, por último, é processado o template. Essa sequência garante que todos os recursos necessários estejam prontos antes da criação dos serviços de aplicação e balanceamento de carga.
+
 
 ## Estrutura do Projeto
 
