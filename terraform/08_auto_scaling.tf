@@ -4,6 +4,12 @@ resource "aws_appautoscaling_target" "ecs_target" {
   resource_id        = "service/${aws_ecs_cluster.production.name}/${aws_ecs_service.production.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
+
+    tags = {
+    Name        = "ecs_autoscaling_target"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
 }
 
 resource "aws_appautoscaling_policy" "ecs_policy" {
@@ -12,6 +18,9 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+
+
 
   target_tracking_scaling_policy_configuration {
     predefined_metric_specification {

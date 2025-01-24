@@ -24,6 +24,12 @@ resource "aws_security_group" "load-balancer" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name        = "load_balancer_security_group"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
 }
 
 # ECS Fargate Security group (traffic ALB -> ECS Fargate Tasks)
@@ -39,13 +45,17 @@ resource "aws_security_group" "ecs-fargate" {
     security_groups = [aws_security_group.load-balancer.id]
   }
 
-  # No SSH ingress rule since Fargate tasks are abstracted and not directly accessible via SSH
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "ecs_fargate_security_group"
+    Environment = "production"
+    CostCenter  = "12345"
   }
 }
 
@@ -67,5 +77,11 @@ resource "aws_security_group" "rds" {
     from_port   = 0
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "rds_security_group"
+    Environment = "production"
+    CostCenter  = "12345"
   }
 }

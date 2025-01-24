@@ -1,5 +1,11 @@
 resource "aws_ecs_cluster" "production" {
   name = "${var.ecs_cluster_name}-cluster"
+
+  tags = {
+    Name        = "${var.ecs_cluster_name}-cluster"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
 }
 
 data "template_file" "app" {
@@ -25,8 +31,13 @@ resource "aws_ecs_task_definition" "app" {
   task_role_arn            = aws_iam_role.ecs-task-execution-role.arn
   container_definitions    = data.template_file.app.rendered
   depends_on               = [aws_db_instance.production]
-}
 
+  tags = {
+    Name        = "django-app-task"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
+}
 
 resource "aws_ecs_service" "production" {
   name            = "${var.ecs_cluster_name}-service"
@@ -44,6 +55,12 @@ resource "aws_ecs_service" "production" {
     target_group_arn = aws_alb_target_group.default-target-group.arn
     container_name   = "django-app"
     container_port   = 8000
+  }
+
+  tags = {
+    Name        = "${var.ecs_cluster_name}-service"
+    Environment = "production"
+    CostCenter  = "12345"
   }
 }
 
@@ -102,4 +119,9 @@ resource "aws_ecs_task_definition" "django_migration" {
       ]
     }
   ])
+  tags = {
+    Name        = "django-migration-task"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
 }

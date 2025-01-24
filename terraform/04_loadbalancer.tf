@@ -5,6 +5,12 @@ resource "aws_lb" "production" {
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
   subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
+
+  tags = {
+    Name        = "${var.ecs_cluster_name}-alb"
+    Environment = "production"
+    CostCenter  = "12345"
+  }
 }
 
 # Target group for ECS Fargate
@@ -23,6 +29,12 @@ resource "aws_alb_target_group" "default-target-group" {
     timeout             = 2
     interval            = 5
     matcher             = "200"
+  }
+
+  tags = {
+    Name        = "${var.ecs_cluster_name}-tg"
+    Environment = "production"
+    CostCenter  = "12345"
   }
 }
 
